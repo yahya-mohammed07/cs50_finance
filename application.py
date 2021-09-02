@@ -112,7 +112,7 @@ def buy():
                )
     # update user's cash
     db.execute("UPDATE users SET cash=? WHERE id=?",
-               current_cash, session["user_id"])  # TODO:
+               current_cash, session["user_id"])
 
     # grab number of user shares
     user_shares = db.execute(
@@ -126,7 +126,7 @@ def buy():
                    quote["name"],
                    shares,
                    usd(quote["price"]),
-                   usd(total))  # TODO:
+                   usd(total))
     # if user has: ++shares count
     else:
         total_shares = user_shares[0]["shares"] + float(shares)
@@ -273,27 +273,12 @@ def sell():
 
     # update user's cash
     db.execute("UPDATE users SET cash=cash+ :increase WHERE id=:id",
-               increase=usd(quote["price"] * float(shares)),  # TODO:
+               increase=usd(quote["price"] * float(shares)),
                id=session["user_id"])
 
     # --shares
     total_shares = user_shares[0]["shares"] - shares
 
-    print(total_shares)
-    user_total = db.execute("SELECT * FROM exchanges WHERE id=? AND symbol=?",
-                            session["user_id"],
-                            quote["symbol"])
-
-    total = str()
-    for i in user_total:
-        total += i["total"]
-
-    float_total = 0.0
-    if len(total) > 1:
-        total = total.lstrip("$")
-        total = total.replace(",", "")
-        float_total = float(total)
-    print(float_total)
     # remove the transaction from exchanges table
     if total_shares == 0:
         db.execute("DELETE FROM exchanges WHERE id=? AND symbol=?",
