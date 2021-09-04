@@ -52,13 +52,14 @@ def index():
     remaining_cash = db.execute(
         "SELECT cash FROM users WHERE id=?", session["user_id"])
 
+    # make a float var to hold total which is str
     float_total = 0.0
     total = str()
     for i in table:
         total = i["total"]
-        if len(total) > 1:
-            total = total.lstrip("$")
-            total = total.replace(",", "")
+        if len(total) > 1: # check if the str exits
+            total = total.lstrip("$") # remove $
+            total = total.replace(",", "") # repalce , with ''
             float_total += float(total)
 
     return render_template("index.html", table=table, total=float_total, cash=remaining_cash[0]["cash"])
